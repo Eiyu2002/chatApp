@@ -2,7 +2,6 @@ import React from "react";
 import { io } from "socket.io-client";
 import { useEffect, useState } from "react";
 import "./assets/styleChat.css";
-import { use } from "react";
 
 const socket = io("http://localhost:3000");
 
@@ -33,7 +32,11 @@ function App() {
       <div className="chatContainer">
         <div className="chatSection">
           {menssageS.map((item, index) => {
-            return <h1 key={index}> {item} </h1>;
+            return (
+              <div key={index} className="textInChat">
+                <h1> {item} </h1>
+              </div>
+            );
           })}
         </div>
         <div className="inputContainer">
