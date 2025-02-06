@@ -18,10 +18,10 @@ const io = new Server(server, {
 io.on("connection", (socket) => {
   console.log(`cliente conectado ${socket.id}`);
 
-  socket.on("mensaje", (data) => {
-    console.log(`Mensaje recibido: ${data}`);
+  socket.on("mensaje", ({menssage, userMenssage}) => {
+    console.log(`Mensaje recibido: ${menssage}`);
 
-    io.emit("mensaje", data);
+    io.emit("mensaje",  {menssage, userMenssage} );
   });
 });
 

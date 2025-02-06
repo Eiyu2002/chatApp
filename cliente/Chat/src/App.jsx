@@ -10,19 +10,31 @@ function App() {
 
   const [menssageS, setMenssageS] = useState([]);
 
+  const [userId, setUserId] = useState();
+
   useEffect(() => {
-    socket.on("mensaje", (data) => {
-      setMenssageS((prevMenssageS) => [...prevMenssageS, data]);
+    socket.on("connect", () => {
+      setUserId(socket.id);
+    });
+
+    socket.on("mensaje", ({ menssage, userMenssage }) => {
+      setMenssageS((prevMenssageS) => [
+        ...prevMenssageS,
+        { menssage, userMenssage },
+      ]);
+
+      setUserId(socket.id);
     });
 
     return () => {
       socket.off("mensaje");
+      socket.off("connect");
     };
   }, []);
 
   const sendMenssage = () => {
     if (menssage.trim()) {
-      socket.emit("mensaje", menssage);
+      socket.emit("mensaje", { menssage, userMenssage: userId });
       setMenssage("");
     }
   };
@@ -33,8 +45,23 @@ function App() {
         <div className="chatSection">
           {menssageS.map((item, index) => {
             return (
-              <div key={index} className="textInChat">
-                <h1> {item} </h1>
+              <div
+                key={index}
+                className={
+                  userId === item.userMenssage
+                    ? "textInChatUserContainer"
+                    : "textInChatContainer"
+                }
+              >
+                <div
+                  className={
+                    userId === item.userMenssage
+                      ? "textInChatUser"
+                      : "textInChat"
+                  }
+                >
+                  <h1> {item.menssage} </h1>
+                </div>
               </div>
             );
           })}

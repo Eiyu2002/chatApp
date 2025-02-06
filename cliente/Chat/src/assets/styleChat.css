@@ -42,6 +42,8 @@ body {
   width: 10%;
 }
 
+
+
 .textInChat {
   font-family: "Roboto", serif;
   background-color: rgb(172, 223, 236);
@@ -63,7 +65,41 @@ body {
   -moz-border-radius: 0px 21px 0px 21px;
 }
 
-.textInChat > h1 {
+.textInChatContainer{
+  display: flex;
+  width: 100%;
+  justify-content: flex-start;
+}
+
+.textInChatUser {
+  font-family: "Roboto", serif;
+  background-color: rgb(31, 230, 147);
+
+  width: fit-content;
+  max-width: 50%;
+ 
+
+  flex-wrap: wrap;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 0.5em;
+  margin-left: 1em;
+
+  align-items: center;
+
+  /*borde de los mensajes enviados*/
+  border-radius: 0px 21px 0px 21px;
+  -webkit-border-radius: 0px 21px 0px 21px;
+  -moz-border-radius: 0px 21px 0px 21px;
+}
+
+.textInChatUserContainer{
+  display: flex;
+  width: 98%;
+  justify-content: flex-end;
+}
+
+.textInChat > h1, .textInChatUser > h1 {
   font-weight: 600;
   font-size: 1em;
 
