@@ -1,86 +1,15 @@
-import React from "react";
-import { io } from "socket.io-client";
-import { useEffect, useState } from "react";
-import "./assets/styleChat.css";
-
-const socket = io("http://localhost:3000");
+import React from 'react'
+import {Route, Routes} from 'react-router-dom'
+import PagesChat from './pages/PagesChat'
+import PagesAuth from './pages/PagesAuth'
 
 function App() {
-  const [menssage, setMenssage] = useState("");
-
-  const [menssageS, setMenssageS] = useState([]);
-
-  const [userId, setUserId] = useState();
-
-  useEffect(() => {
-    socket.on("connect", () => {
-      setUserId(socket.id);
-    });
-
-    socket.on("mensaje", ({ menssage, userMenssage }) => {
-      setMenssageS((prevMenssageS) => [
-        ...prevMenssageS,
-        { menssage, userMenssage },
-      ]);
-
-      setUserId(socket.id);
-    });
-
-    return () => {
-      socket.off("mensaje");
-      socket.off("connect");
-    };
-  }, []);
-
-  const sendMenssage = () => {
-    if (menssage.trim()) {
-      socket.emit("mensaje", { menssage, userMenssage: userId });
-      setMenssage("");
-    }
-  };
-
   return (
-    <div className="bodyChat">
-      <div className="chatContainer">
-        <div className="chatSection">
-          {menssageS.map((item, index) => {
-            return (
-              <div
-                key={index}
-                className={
-                  userId === item.userMenssage
-                    ? "textInChatUserContainer"
-                    : "textInChatContainer"
-                }
-              >
-                <div
-                  className={
-                    userId === item.userMenssage
-                      ? "textInChatUser"
-                      : "textInChat"
-                  }
-                >
-                  <h1> {item.menssage} </h1>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-        <div className="inputContainer">
-          <input
-            type="text"
-            onChange={(e) => {
-              setMenssage(e.target.value);
-            }}
-            className="inputChat"
-          />
-          <button className="sendChat" onClick={() => sendMenssage()}>
-            Enviar
-          </button>
-        </div>
-      </div>
-    </div>
-  );
+   <Routes>
+    <Route path='/' element={<PagesChat></PagesChat>}></Route>
+    <Route path='/auth' element={<PagesAuth></PagesAuth>}></Route>
+   </Routes>
+  )
 }
 
-export default App;
+export default App
