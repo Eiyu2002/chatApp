@@ -13,10 +13,10 @@ function ComponentFormAuth({ registerPage }) {
   } = useForm();
 
   const onSubmt = (user) => {
-    if (password === confirmPassword && registerPage) {
-      console.log("contraseñas coinciden")
+    if (registerPage) {
+      console.log("contraseñas coinciden");
       registerUser(user);
-    }else {
+    } else {
       loginUser(user);
     }
   };

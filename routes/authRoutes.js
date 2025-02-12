@@ -1,4 +1,6 @@
 import { Router } from "express";
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 import db from "../db.js";
 
 const routes = Router();
@@ -7,9 +9,10 @@ routes.post("/api/register", async (req, res) => {
   try {
     const { userEmail, userName, userPassword } = req.body;
 
+    const passwordBcrypt = await bcrypt.hash(userPassword, 10);
     const result = await db.query(
       "INSERT INTO users (username, useremail, userpassword) VALUES (?,?,?)",
-      [userName, userEmail, userPassword]
+      [userName, userEmail, passwordBcrypt]
     );
     console.log(result);
     res.status(200).send("OK");
@@ -23,12 +26,23 @@ routes.post("/api/login", async (req, res) => {
     const { userName, userPassword } = req.body;
 
     const [rows] = await db.query("SELECT * FROM users WHERE userName = ?", [
-      userName
+      userName,
     ]);
 
     if (rows.length > 0) {
-      res.status(200).json(rows[0]);
-      console.log(rows)
+      const comparePassword = bcrypt.compare(
+        userPassword,
+        rows[0].userpassword
+      );
+      if (comparePassword) {
+        const tokenUser = jwt.sign({ id: rows[0].id }, process.env.JWT_SECRET, {
+          expiresIn: process.env.JWT_EXPIRES,
+        });
+
+        res.cookie("token", tokenUser);
+      }else {
+        res.status(500).json({menssage: "Contraseña incorrecta"})
+      }
     } else {
       res.status(404).json({ menssage: "Usuario no encontrado" });
     }

@@ -4,10 +4,12 @@ import http from "http";
 import { Server } from "socket.io";
 import routes from "./routes/authRoutes.js";
 import dotenv from 'dotenv'
+import cookieparser from 'cookie-parser'
+
 
 const app = express();
 dotenv.config();
-
+app.use(cookieparser());
 app.use(
   cors({
     origin: "http://localhost:5173",
