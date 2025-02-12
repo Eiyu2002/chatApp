@@ -3,8 +3,11 @@ import cors from "cors";
 import http from "http";
 import { Server } from "socket.io";
 import routes from "./routes/authRoutes.js";
+import dotenv from 'dotenv'
 
 const app = express();
+dotenv.config();
+
 app.use(
   cors({
     origin: "http://localhost:5173",
