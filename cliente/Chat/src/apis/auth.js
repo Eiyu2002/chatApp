@@ -18,6 +18,6 @@ export async function loginUser(user) {
     console.log(`Login exitoso, cliente. ${response.data}`);
     return response.data;
   } catch (error) {
-    console.log(`Error en login, cliente: ${error} `);
+    console.log(`Error en login, cliente:`, error.response.data.message );
   }
 }

@@ -30,7 +30,7 @@ routes.post("/api/login", async (req, res) => {
     ]);
 
     if (rows.length > 0) {
-      const comparePassword = bcrypt.compare(
+      const comparePassword = await bcrypt.compare(
         userPassword,
         rows[0].userpassword
       );
@@ -40,11 +40,11 @@ routes.post("/api/login", async (req, res) => {
         });
 
         res.cookie("token", tokenUser);
-      }else {
-        res.status(500).json({menssage: "Contraseña incorrecta"})
+      } else {
+        return res.status(500).json({ message: "Contraseña incorrecta" });
       }
     } else {
-      res.status(404).json({ menssage: "Usuario no encontrado" });
+      return res.status(404).json({ message: "Usuario no encontrado" });
     }
   } catch (error) {
     res.status(500).send(error);
