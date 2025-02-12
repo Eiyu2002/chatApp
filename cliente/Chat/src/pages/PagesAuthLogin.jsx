@@ -1,12 +1,12 @@
 import React from 'react'
 import ComponentFormAuth from '../components/formAuth/ComponentFormAuth'
 
-function PagesAuth() {
+function PagesAuthLogin() {
   return (
    <section style={{width: "100vw", height: "100vh", display: "flex", justifyContent: "center", alignItems: "center"}}>
-        <ComponentFormAuth></ComponentFormAuth>
+        <ComponentFormAuth registerPage={false}></ComponentFormAuth>
    </section>
   )
 }
 
-export default PagesAuth
+export default PagesAuthLogin
