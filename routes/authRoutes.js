@@ -37,7 +37,7 @@ routes.post("/api/login", async (req, res) => {
       if (comparePassword) {
         const tokenUser = jwt.sign({ id: rows[0].id }, process.env.JWT_SECRET, {
           expiresIn: process.env.JWT_EXPIRES,
-        });
+        }); 
 
         res.cookie("token", tokenUser);
       } else {
