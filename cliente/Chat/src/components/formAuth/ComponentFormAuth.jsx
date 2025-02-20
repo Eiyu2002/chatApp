@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { registerUser, loginUser } from "../../apis/auth.js";
 import { useForm } from "react-hook-form";
+import "../../assets/styleFormAuth.css";
 
 function ComponentFormAuth({ registerPage }) {
   const [password, setPassword] = useState("");
@@ -23,7 +24,7 @@ function ComponentFormAuth({ registerPage }) {
 
   return (
     <form onSubmit={handleSubmit(onSubmt)}>
-      <div>
+      <div className="contentForm">
         <input
           type="text"
           placeholder="Nombre de usuario"
@@ -48,7 +49,11 @@ function ComponentFormAuth({ registerPage }) {
         {registerPage && (
           <input type="password" placeholder="Confirmar contraseña" />
         )}
-        <button type="submit">Enviar</button>
+        <button type="submit" className="buttonSubmit">
+          {registerPage ? "Crear cuenta" : "Iniciar sesion"}{" "}
+        </button>
+
+        {registerPage ? <button className="buttonCount">Ya tengo una cuenta</button> : <button className="buttonCount">No tengo aun una cuenta</button>}
       </div>
     </form>
   );
