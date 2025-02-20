@@ -1,12 +1,21 @@
-import React from 'react'
-import ComponentFormAuth from '../components/formAuth/ComponentFormAuth'
+import React from "react";
+import ComponentFormAuth from "../components/formAuth/ComponentFormAuth";
+import "../assets/stylePageAuth.css";
 
 function PagesAuthLogin() {
   return (
-   <section style={{width: "100vw", height: "100vh", display: "flex", justifyContent: "center", alignItems: "center"}}>
+    <div className="contentMain">
+      <section className="sectionForm">
         <ComponentFormAuth registerPage={false}></ComponentFormAuth>
-   </section>
-  )
+      </section>
+
+      <section className="heroSection">
+        <h1>Disfruta de este prototipo de chat diseñado por</h1>
+        <h2>Joel Maximiliano Etchegaray</h2>
+        <h1>Inicia sesion con tu cuenta</h1>
+      </section>
+    </div>
+  );
 }
 
-export default PagesAuthLogin
+export default PagesAuthLogin;
