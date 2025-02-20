@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { registerUser, loginUser } from "../../apis/auth.js";
 import { useForm } from "react-hook-form";
 import "../../assets/styleFormAuth.css";
+import { Link } from "react-router-dom";
 
 function ComponentFormAuth({ registerPage }) {
   const [password, setPassword] = useState("");
@@ -53,7 +54,11 @@ function ComponentFormAuth({ registerPage }) {
           {registerPage ? "Crear cuenta" : "Iniciar sesion"}{" "}
         </button>
 
-        {registerPage ? <button className="buttonCount">Ya tengo una cuenta</button> : <button className="buttonCount">No tengo aun una cuenta</button>}
+        {registerPage ? (
+          <Link to={"/authLogin"} className="buttonCount">Ya tengo una cuenta</Link>
+        ) : (
+          <Link to={"/authRegister"} className="buttonCount">No tengo aun una cuenta</Link>
+        )}
       </div>
     </form>
   );
