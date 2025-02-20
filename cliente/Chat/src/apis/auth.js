@@ -15,7 +15,7 @@ export async function loginUser(user) {
   try {
     console.log(user);
     const response = await axios.post("/login", user);
-    console.log(`Login exitoso, cliente. ${response.data}`);
+    console.log(`Login exitoso, cliente. ${response.data.message}`);
     return response.data;
   } catch (error) {
     console.log(`Error en login, cliente:`, error.response.data.message );

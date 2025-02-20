@@ -39,7 +39,7 @@ routes.post("/api/login", async (req, res) => {
           expiresIn: process.env.JWT_EXPIRES,
         }); 
 
-        res.cookie("token", tokenUser);
+        res.cookie("token", tokenUser).status(200).json({message: "Inicio de sesion realizado correctamente"});
       } else {
         return res.status(500).json({ message: "Contraseña incorrecta" });
       }
