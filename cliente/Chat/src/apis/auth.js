@@ -18,6 +18,17 @@ export async function loginUser(user) {
     console.log(`Login exitoso, cliente. ${response.data.message}`);
     return response.data;
   } catch (error) {
-    console.log(`Error en login, cliente:`, error.response.data.message );
+    console.log(`Error en login, cliente:`, error.response.data.message);
+  }
+}
+
+export async function verifyToken() {
+  try {
+    const response = await axios.get("/verifyToken");
+    console.log(`Token verificado. ${response.data.message}`);
+
+    return response.data;
+  } catch (error) {
+    console.log(`Error al verificar el token. ${error.response.data.message} `);
   }
 }

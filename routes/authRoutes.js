@@ -57,12 +57,44 @@ routes.post("/api/login", async (req, res) => {
 });
 
 //Cierre de sesion
-routes.post("/logout", (req, res) => {
+routes.post("/api/logout", (req, res) => {
   res.cookie("token", "", {
     expires: new Date(0),
   });
 
-  return res.status(200).json({message: "Se cerro la sesion del usuario"});
+  return res.status(200).json({ message: "Se cerro la sesion del usuario" });
+});
+
+//Verificar token
+
+routes.get("/api/verifyToken", async (req, res) => {
+  const { token } = req.cookies;
+
+  try {
+    if (!token) {
+      return res
+        .status(401)
+        .json({ message: "No hay token para verificar al usuario" });
+    }
+    const userId = jwt.verify(token, process.env.JWT_SECRET);
+    if (!userId) {
+      return res.status(403).json({ message: "Token inválido" });
+    }
+    const [rows] = await db.query("SELECT * FROM users WHERE id = ?", [
+      userId.id,
+    ]);
+
+    if (rows.length > 0) {
+      res.status(200).json({
+        message: "El usuario se encuentra autenticado",
+        username: rows[0].username,
+        userEmail: rows[0].useremail,
+        userId: rows[0].id,
+      });
+    }
+  } catch (error) {
+    return res.status(403).json({ message: "Token invalido o expirado" });
+  }
 });
 
 export default routes;
