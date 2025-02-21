@@ -1,12 +1,27 @@
 import { createContext, useState, useEffect, useContext } from "react";
 import Cookies from "js-cookie";
 import { verifyToken } from "../apis/auth.js";
+import {useNavigate} from "react-router-dom";
 
 const MyContext = createContext();
 
 export const MyProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [userRegister, setUserRegister] = useState(false);
+  const [userLogin, setUserLogin] = useState(false);
+
+  const navigate = useNavigate();
+
+  if(userLogin){
+    navigate("/")
+  }
+
+  if(userRegister){
+    navigate("/loginAuth")
+  }
+
+
   useEffect(() => {
     async function checkAuth() {
       const cookie = Cookies.get();
@@ -35,10 +50,8 @@ export const MyProvider = ({ children }) => {
     checkAuth(); // Llamar a la función async
   }, []);
 
-
-
   return (
-    <MyContext.Provider value={{ isAuthenticated, loading }}>
+    <MyContext.Provider value={{ isAuthenticated, loading, setUserLogin, setUserRegister }}>
       {children}
     </MyContext.Provider>
   );

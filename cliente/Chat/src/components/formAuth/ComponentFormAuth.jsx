@@ -1,12 +1,13 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { registerUser, loginUser } from "../../apis/auth.js";
 import { useForm } from "react-hook-form";
 import "../../assets/styleFormAuth.css";
 import { Link } from "react-router-dom";
-
+import { useNavigate } from "react-router-dom";
 function ComponentFormAuth({ registerPage }) {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const navigate = useNavigate();
 
   const {
     register,
@@ -14,12 +15,18 @@ function ComponentFormAuth({ registerPage }) {
     formState: { errors },
   } = useForm();
 
-  const onSubmt = (user) => {
+  const onSubmt = async (user) => {
     if (registerPage) {
       console.log("contraseñas coinciden");
-      registerUser(user);
+      const res = await registerUser(user);
+      if (res) {
+        navigate("/authLogin");
+      }
     } else {
-      loginUser(user);
+      const res = await loginUser(user);
+      if (res) {
+        navigate("/");
+      }
     }
   };
 
@@ -55,9 +62,13 @@ function ComponentFormAuth({ registerPage }) {
         </button>
 
         {registerPage ? (
-          <Link to={"/authLogin"} className="buttonCount">Ya tengo una cuenta</Link>
+          <Link to={"/authLogin"} className="buttonCount">
+            Ya tengo una cuenta
+          </Link>
         ) : (
-          <Link to={"/authRegister"} className="buttonCount">No tengo aun una cuenta</Link>
+          <Link to={"/authRegister"} className="buttonCount">
+            No tengo aun una cuenta
+          </Link>
         )}
       </div>
     </form>
