@@ -3,6 +3,7 @@ import { useMyContext } from "../context/Context";
 
 export function ProtecRoutes() {
   const { isAuthenticated, loading } = useMyContext();
+  console.log(`Valor de isAuthenticated: ${isAuthenticated} `)
   if (loading) {
     return <h1>Loading</h1>;
   }

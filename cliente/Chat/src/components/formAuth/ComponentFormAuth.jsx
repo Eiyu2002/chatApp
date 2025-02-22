@@ -25,6 +25,8 @@ function ComponentFormAuth({ registerPage }) {
     } else {
       const res = await loginUser(user);
       if (res) {
+        console.log("ejecutandose navigate");
+
         navigate("/");
       }
     }
@@ -35,6 +37,7 @@ function ComponentFormAuth({ registerPage }) {
       <div className="contentForm">
         <input
           type="text"
+          autoComplete="username"
           placeholder="Nombre de usuario"
           {...register("userName", {
             required: "El nombre de usuario es obligatorio",
@@ -43,6 +46,7 @@ function ComponentFormAuth({ registerPage }) {
         {registerPage && (
           <input
             type="email"
+            autoComplete="email"
             placeholder="Correo electronico"
             {...register("userEmail", { required: "El email es obligatorio" })}
           />
