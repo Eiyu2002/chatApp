@@ -1,16 +1,16 @@
 import { createContext, useState, useEffect, useContext } from "react";
 import Cookies from "js-cookie";
 import { verifyToken } from "../apis/auth.js";
-import {useLocation} from 'react-router-dom'
+import { useLocation } from "react-router-dom";
 
 const MyContext = createContext();
 
 export const MyProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [userRegister, setUserRegister] = useState(false);
-  const [userLogin, setUserLogin] = useState(false);
+
   const location = useLocation();
+  const [user, setUser] = useState({});
 
   useEffect(() => {
     async function checkAuth() {
@@ -19,14 +19,13 @@ export const MyProvider = ({ children }) => {
       if (cookie.token) {
         try {
           const res = await verifyToken(cookie.token);
-          console.log("recibido el res")
+          console.log("recibido el res");
           if (!res) {
             setIsAuthenticated(false);
             setLoading(false);
           } else {
+            setUser({ username: res.username });
             setIsAuthenticated(true);
-            console.log(res.userId);
-            console.log(isAuthenticated);
             setLoading(false);
           }
         } catch (error) {
@@ -41,9 +40,7 @@ export const MyProvider = ({ children }) => {
   }, [location]);
 
   return (
-    <MyContext.Provider
-      value={{ isAuthenticated, loading, setUserLogin, setUserRegister }}
-    >
+    <MyContext.Provider value={{ isAuthenticated, loading, user }}>
       {children}
     </MyContext.Provider>
   );

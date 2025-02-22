@@ -2,25 +2,26 @@ import React from "react";
 import { io } from "socket.io-client";
 import { useEffect, useState } from "react";
 import "../assets/styleChat.css";
+import {useMyContext} from '../context/Context' 
 
 const socket = io("http://localhost:3000");
 
 function PagesChat() {
   const [menssage, setMenssage] = useState("");
-
   const [menssageS, setMenssageS] = useState([]);
-
   const [userId, setUserId] = useState();
+  const {user} = useMyContext();  
+
 
   useEffect(() => {
     socket.on("connect", () => {
       setUserId(socket.id);
     });
 
-    socket.on("mensaje", ({ menssage, userMenssage }) => {
+    socket.on("mensaje", ({ menssage, userMenssage, username }) => {
       setMenssageS((prevMenssageS) => [
         ...prevMenssageS,
-        { menssage, userMenssage },
+        { menssage, userMenssage, username },
       ]);
 
       setUserId(socket.id);
@@ -34,7 +35,7 @@ function PagesChat() {
 
   const sendMenssage = () => {
     if (menssage.trim()) {
-      socket.emit("mensaje", { menssage, userMenssage: userId });
+      socket.emit("mensaje", { menssage, userMenssage: userId, username: user.username });
       setMenssage("");
     }
   };
@@ -60,6 +61,7 @@ function PagesChat() {
                       : "textInChat"
                   }
                 >
+                  <h1 className="userNameInChat"> {item.username} </h1>
                   <h1> {item.menssage} </h1>
                 </div>
               </div>
