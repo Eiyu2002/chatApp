@@ -20,7 +20,16 @@ export async function loginUser(user) {
 
     return response.data;
   } catch (error) {
-    console.log(`Error en login, cliente:`, error.response.data.message);
+    console.log(`Error en login, cliente: ${error.response.data.message}`);
+  }
+}
+
+export async function logoutUser() {
+  try {
+    const response = await axios.post("/logout");
+    console.log(`Cierre de sesion exitoso. ${response.data.message} `);
+  } catch (error) {
+    console.log(`Error en el cierre de sesion. ${error.response.data.message} `)
   }
 }
 

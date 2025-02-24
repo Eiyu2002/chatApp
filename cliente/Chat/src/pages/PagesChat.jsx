@@ -2,7 +2,9 @@ import React from "react";
 import { io } from "socket.io-client";
 import { useEffect, useState } from "react";
 import "../assets/styleChat.css";
-import {useMyContext} from '../context/Context' 
+import { useMyContext } from "../context/Context";
+import { logoutUser } from "../apis/auth";
+import { useNavigate } from "react-router-dom";
 
 const socket = io("http://localhost:3000");
 
@@ -10,8 +12,8 @@ function PagesChat() {
   const [menssage, setMenssage] = useState("");
   const [menssageS, setMenssageS] = useState([]);
   const [userId, setUserId] = useState();
-  const {user} = useMyContext();  
-
+  const { user } = useMyContext();
+  const navigate = useNavigate();
 
   useEffect(() => {
     socket.on("connect", () => {
@@ -35,9 +37,20 @@ function PagesChat() {
 
   const sendMenssage = () => {
     if (menssage.trim()) {
-      socket.emit("mensaje", { menssage, userMenssage: userId, username: user.username });
+      socket.emit("mensaje", {
+        menssage,
+        userMenssage: userId,
+        username: user.username,
+      });
       setMenssage("");
     }
+  };
+
+  const logout = async () => {
+    const res = await logoutUser();
+
+    console.log("Se cerro la sesion");
+    window.location.href = "/authLogin";
   };
 
   return (
@@ -78,6 +91,14 @@ function PagesChat() {
           />
           <button className="sendChat" onClick={() => sendMenssage()}>
             Enviar
+          </button>
+        </div>
+      </div>
+
+      <div className="buttonContainer">
+        <div className="buttonLogOutContainer">
+          <button className="buttonLogOut" onClick={() => logout()}>
+            Cerrar Sesion
           </button>
         </div>
       </div>
