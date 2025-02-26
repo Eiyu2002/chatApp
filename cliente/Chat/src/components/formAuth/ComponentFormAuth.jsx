@@ -27,7 +27,8 @@ function ComponentFormAuth({ registerPage }) {
       if (res) {
         console.log("ejecutandose navigate");
 
-        navigate("/");
+        window.location.href = "/";
+
       }
     }
   };

@@ -8,30 +8,63 @@ body {
   height: 100vh;
   display: flex;
   align-items: center;
-  background-color: beige;
+  justify-content: center;
+}
+.mainContainer {
+  margin: auto;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  width: 70%;
+  height: 75%;
+  display: flex;
+  justify-content: center;
+  border: #333 solid 0.1em;
+  border-radius: 23px 23px 23px 23px;
+  -webkit-border-radius: 23px 23px 23px 23px;
+  -moz-border-radius: 23px 23px 23px 23px;
 }
 
 .chatContainer {
-  width: 45%;
-  height: 60%;
-  margin: auto;
-  border: solid 3px rgba(71, 73, 73, 0.178);
-  background-color: aliceblue;
-  display: flex;
+  width: 40%;
+  height: 100%;
+
+  background-color: #ffffff;
   flex-direction: column;
   justify-content: center;
+}
+
+.interfaceContainer {
+  width: 50%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  justify-content: center;
+}
+
+.profilesContainer {
+  margin-top: 1em;
+  height: 80%;
+  width: 90%;
+}
+
+.buttonContainer {
+  display: flex;
+  justify-content: center;
   align-items: center;
+  height: 3em;
 }
 
 .chatSection {
-  width: 98%;
-  height: 85%;
+  margin-top: 1em;
+  width: 100%;
+  height: 83%;
   overflow: auto;
 }
 
 .inputContainer {
-  width: 90%;
+  width: 100%;
   display: flex;
+  gap: 1em;
 }
 
 .inputChat {
@@ -44,7 +77,7 @@ body {
 
 .textInChat {
   font-family: "Roboto", serif;
-  background-color: rgb(172, 223, 236);
+  background: #ffffff;
 
   width: fit-content;
   max-width: 50%;
@@ -54,13 +87,14 @@ body {
   justify-content: center;
   margin-bottom: 0.5em;
   margin-left: 1em;
+  border: 2px solid #333;
 
   align-items: center;
 
   /*borde de los mensajes enviados*/
-  border-radius: 0px 21px 0px 21px;
-  -webkit-border-radius: 0px 21px 0px 21px;
-  -moz-border-radius: 0px 21px 0px 21px;
+  border-radius: 0px 19px 19px 19px;
+  -webkit-border-radius: 0px 19px 19px 19px;
+  -moz-border-radius: 0px 19px 19px 19px;
 }
 
 .textInChatContainer {
@@ -71,7 +105,10 @@ body {
 
 .textInChatUser {
   font-family: "Roboto", serif;
-  background-color: rgb(31, 230, 147);
+  background: #1e1e1e;
+  color: #00ffcc;
+
+
 
   width: fit-content;
   max-width: 50%;
@@ -81,13 +118,15 @@ body {
   justify-content: center;
   margin-bottom: 0.5em;
   margin-left: 1em;
+  border: 2px solid #00ffcc;
+
 
   align-items: center;
 
   /*borde de los mensajes enviados*/
-  border-radius: 0px 21px 0px 21px;
-  -webkit-border-radius: 0px 21px 0px 21px;
-  -moz-border-radius: 0px 21px 0px 21px;
+  border-radius: 20px 0px 20px 20px;
+  -webkit-border-radius: 20px 0px 20px 20px;
+  -moz-border-radius: 20px 0px 20px 20px;
 }
 
 .textInChatUserContainer {
@@ -117,5 +156,43 @@ body {
   min-width: 1em;
 
   overflow-wrap: break-word;
+  word-break: break-word;
   white-space: normal;
+}
+
+.buttonStyle {
+  width: 30%;
+
+  background: #ffffff;
+  color: #333;
+  padding: 12px 20px;
+  font-size: 0.9em;
+  border: 2px solid #333;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  font-family: "Roboto", serif;
+}
+.buttonStyle2 {
+  background: #1e1e1e;
+  text-decoration: none;
+  font-family: "Roboto", serif;
+  text-align: center;
+  color: #00ffcc;
+  padding: 12px 20px;
+  font-size: 1em;
+  border: 2px solid #00ffcc;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
+}
+.buttonStyle2:hover {
+  background: #00ffcc;
+  color: #1e1e1e;
+  box-shadow: 0 0 15px rgba(0, 255, 204, 0.8);
+}
+.buttonStyle:hover {
+  background: #333;
+  color: #ffffff;
 }

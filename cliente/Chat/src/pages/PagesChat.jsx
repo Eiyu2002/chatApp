@@ -13,12 +13,12 @@ function PagesChat() {
   const [menssageS, setMenssageS] = useState([]);
   const [userId, setUserId] = useState();
   const { user } = useMyContext();
-  const navigate = useNavigate();
 
   useEffect(() => {
     socket.on("connect", () => {
       setUserId(socket.id);
     });
+ 
 
     socket.on("mensaje", ({ menssage, userMenssage, username }) => {
       setMenssageS((prevMenssageS) => [
@@ -28,6 +28,7 @@ function PagesChat() {
 
       setUserId(socket.id);
     });
+    console.log(userId);
 
     return () => {
       socket.off("mensaje");
@@ -39,7 +40,7 @@ function PagesChat() {
     if (menssage.trim()) {
       socket.emit("mensaje", {
         menssage,
-        userMenssage: userId,
+        userMenssage: socket.id,
         username: user.username,
       });
       setMenssage("");
@@ -55,51 +56,73 @@ function PagesChat() {
 
   return (
     <div className="bodyChat">
-      <div className="chatContainer">
-        <div className="chatSection">
-          {menssageS.map((item, index) => {
-            return (
-              <div
-                key={index}
-                className={
-                  userId === item.userMenssage
-                    ? "textInChatUserContainer"
-                    : "textInChatContainer"
-                }
-              >
+      <div className="mainContainer">
+        <div className="chatContainer">
+          <div className="chatSection">
+            {menssageS.map((item, index) => {
+              return (
                 <div
+                  key={index}
                   className={
                     userId === item.userMenssage
-                      ? "textInChatUser"
-                      : "textInChat"
+                      ? "textInChatUserContainer"
+                      : "textInChatContainer"
                   }
                 >
-                  <h1 className="userNameInChat"> {item.username} </h1>
-                  <h1> {item.menssage} </h1>
+                  <div
+                    className={
+                      userId === item.userMenssage
+                        ? "textInChatUser"
+                        : "textInChat"
+                    }
+                  >
+                    <h1 className="userNameInChat"> {item.username} </h1>
+                    <h1> {item.menssage} </h1>
+                  </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
+          <div className="inputContainer">
+            <input
+              type="text"
+              onChange={(e) => {
+                setMenssage(e.target.value);
+              }}
+              className="inputChat"
+            />
+            <button
+              className="sendChat buttonStyle"
+              onClick={() => sendMenssage()}
+            >
+              Enviar
+            </button>
+          </div>
         </div>
-        <div className="inputContainer">
-          <input
-            type="text"
-            onChange={(e) => {
-              setMenssage(e.target.value);
-            }}
-            className="inputChat"
-          />
-          <button className="sendChat" onClick={() => sendMenssage()}>
-            Enviar
-          </button>
-        </div>
-      </div>
 
-      <div className="buttonContainer">
-        <div className="buttonLogOutContainer">
-          <button className="buttonLogOut" onClick={() => logout()}>
-            Cerrar Sesion
-          </button>
+        <div className="interfaceContainer">
+          <div className="profilesContainer"></div>
+
+          <div className="buttonContainer">
+            <button className="buttonHouse buttonStyle2">
+              <i className="fa-solid fa-house"></i>
+            </button>
+            <button className="buttonProfile buttonStyle2">
+              <i
+                style={{ fontSize: "1.2em" }}
+                className="fa-solid fa-id-badge"
+              ></i>
+            </button>
+            <button className="buttonChatsList buttonStyle2">
+              <i className="fa-solid fa-comments"></i>
+            </button>
+            <button
+              className="buttonLogOut buttonStyle"
+              onClick={() => logout()}
+            >
+              Cerrar Sesion
+            </button>
+          </div>
         </div>
       </div>
     </div>
