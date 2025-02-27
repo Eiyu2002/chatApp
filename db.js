@@ -9,3 +9,4 @@ const connection = mysql2.createConnection({
 }).promise(); // ← Si usas esto, no necesitas connection.connect()
 
 export default connection;
+
