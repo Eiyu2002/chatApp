@@ -6,7 +6,9 @@ import { useMyContext } from "../context/Context";
 import { logoutUser } from "../apis/auth";
 import { useNavigate } from "react-router-dom";
 
-const socket = io("http://localhost:3000");
+const socket = io("chatapp-production-b82e.up.railway.app" || "http://localhost:3000");
+
+
 
 function PagesChat() {
   const [menssage, setMenssage] = useState("");

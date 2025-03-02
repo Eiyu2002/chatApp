@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const instance = axios.create({
-    baseURL: 'chatapp-production-b82e.up.railway.app/api',
+    baseURL: 'https://chatapp-production-b82e.up.railway.app/api' || "http://localhost:3000",
     withCredentials: true
 })
 

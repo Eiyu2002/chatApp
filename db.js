@@ -6,7 +6,7 @@ const connection = mysql2.createConnection({
   password: process.env.PASSWORD_DB || "0000",
   port: process.env.PORT_DB || "3306",
   database: process.env.NAME_DB || "chatdb",
-}).promise(); // ← Si usas esto, no necesitas connection.connect()
+}).promise();
 
 export default connection;
 

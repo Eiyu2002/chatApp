@@ -12,7 +12,7 @@ dotenv.config();
 app.use(cookieparser());
 app.use(
   cors({
-    origin: "https://resilient-naiad-27e306.netlify.app",
+    origin: "https://resilient-naiad-27e306.netlify.app" || "http://localhost:5173",
     methods: "GET, POST, PUT, DELETE",
     allowedHeaders: "Content-Type,Authorization",
     credentials: true,
@@ -26,7 +26,7 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: "https://resilient-naiad-27e306.netlify.app",
+    origin: "https://resilient-naiad-27e306.netlify.app" || "http://localhost:5173",
     methods: ["GET", "POST"],
   },
 });
