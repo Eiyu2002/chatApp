@@ -43,7 +43,6 @@ routes.post("/api/login", async (req, res) => {
 
         res
           .cookie("token", tokenUser, {
-            httpOnly: true, // Para que la cookie no sea accesible desde JavaScript (mejora la seguridad)
             secure: process.env.NODE_ENV === "production", // Solo usa cookies seguras (https)
             sameSite: "None", // Necesario para permitir cookies entre diferentes dominios
             expires: new Date(Date.now() + 3600000), // Expiración (1 hora, ajusta según tu necesidad)
