@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import { io } from "socket.io-client";
 import { useEffect, useState } from "react";
 import "../assets/styleChat.css";
@@ -6,21 +6,19 @@ import { useMyContext } from "../context/Context";
 import { logoutUser } from "../apis/auth";
 import { useNavigate } from "react-router-dom";
 
-const socket = io('https://chatapp-production-b82e.up.railway.app');
-
-
+const socket = io("https://chatapp-production-b82e.up.railway.app");
 
 function PagesChat() {
   const [menssage, setMenssage] = useState("");
   const [menssageS, setMenssageS] = useState([]);
   const [userId, setUserId] = useState();
   const { user } = useMyContext();
+  const inputMessage = useRef(null);
 
   useEffect(() => {
     socket.on("connect", () => {
       setUserId(socket.id);
     });
- 
 
     socket.on("mensaje", ({ menssage, userMenssage, username }) => {
       setMenssageS((prevMenssageS) => [
@@ -46,6 +44,7 @@ function PagesChat() {
         username: user.username,
       });
       setMenssage("");
+      inputMessage.current.value = "";
     }
   };
 
@@ -54,6 +53,13 @@ function PagesChat() {
 
     console.log("Se cerro la sesion");
     window.location.href = "/authLogin";
+  };
+
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter") {
+      sendMenssage();
+      event.target.value = "";
+    }
   };
 
   return (
@@ -87,7 +93,9 @@ function PagesChat() {
           </div>
           <div className="inputContainer">
             <input
+              ref={inputMessage}
               type="text"
+              onKeyDown={handleKeyDown}
               onChange={(e) => {
                 setMenssage(e.target.value);
               }}
