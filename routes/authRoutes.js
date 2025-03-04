@@ -64,7 +64,11 @@ routes.post("/api/login", async (req, res) => {
 //Cierre de sesion
 routes.post("/api/logout", (req, res) => {
   res.cookie("token", "", {
-    expires: new Date(0),
+    httpOnly: false, // Si la cookie se creó con httpOnly, debe eliminarse desde el servidor
+    secure: process.env.NODE_ENV === "production", // Solo en HTTPS en producción
+    sameSite: "None", // Si la usaste al crear la cookie, inclúyela aquí
+    path: "/", // Asegura que se elimine en todas las rutas
+    expires: new Date(0), // Alternativa: maxAge: 0
   });
 
   return res.status(200).json({ message: "Se cerro la sesion del usuario" });

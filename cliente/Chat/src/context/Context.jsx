@@ -11,7 +11,7 @@ export const MyProvider = ({ children }) => {
   const [user, setUser] = useState({});
 
   const checkAuth = async () => {
-    const cookie = Cookies.get("token");
+    const cookie = Cookies.get();
     console.log(cookie);
     if (cookie) {
       try {
