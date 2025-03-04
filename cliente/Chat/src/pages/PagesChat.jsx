@@ -14,6 +14,7 @@ function PagesChat() {
   const [userId, setUserId] = useState();
   const { user } = useMyContext();
   const inputMessage = useRef(null);
+  const chatSeccion = useRef(null);
 
   useEffect(() => {
     socket.on("connect", () => {
@@ -25,6 +26,7 @@ function PagesChat() {
         ...prevMenssageS,
         { menssage, userMenssage, username },
       ]);
+      
 
       setUserId(socket.id);
     });
@@ -35,6 +37,9 @@ function PagesChat() {
       socket.off("connect");
     };
   }, []);
+  useEffect(()=>{
+    chatSeccion.current.scrollTop = chatSeccion.current.scrollHeight;
+  }, [menssageS]);
 
   const sendMenssage = () => {
     if (menssage.trim()) {
@@ -47,7 +52,7 @@ function PagesChat() {
       inputMessage.current.value = "";
     }
   };
-
+  //MANEJAR EL CIERRE DE SESION DEL BOTON CERRAR SESION
   const logout = async () => {
     const res = await logoutUser();
 
@@ -55,10 +60,10 @@ function PagesChat() {
     window.location.href = "/authLogin";
   };
 
+  //MANEJAR TECLA ENTER PARA ENVIAR EL MENSAJE
   const handleKeyDown = (event) => {
     if (event.key === "Enter") {
       sendMenssage();
-      event.target.value = "";
     }
   };
 
@@ -66,7 +71,11 @@ function PagesChat() {
     <div className="bodyChat">
       <div className="mainContainer">
         <div className="chatContainer">
-          <div className="chatSection">
+          <div
+            ref={chatSeccion}
+            className="chatSection"
+         
+          >
             {menssageS.map((item, index) => {
               return (
                 <div

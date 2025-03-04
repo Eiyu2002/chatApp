@@ -59,6 +59,7 @@ body {
   width: 100%;
   height: 83%;
   overflow: auto;
+  scroll-behavior: smooth;
 }
 
 .inputContainer {
