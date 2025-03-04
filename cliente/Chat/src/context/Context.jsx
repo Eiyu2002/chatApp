@@ -11,11 +11,11 @@ export const MyProvider = ({ children }) => {
   const [user, setUser] = useState({});
 
   const checkAuth = async () => {
-    const cookie = Cookies.get();
-    console.log(cookie.token);
-    if (cookie.token) {
+    const cookie = Cookies.get("token");
+    console.log(cookie);
+    if (cookie) {
       try {
-        const res = await verifyToken(cookie.token);
+        const res = await verifyToken(cookie);
         console.log("recibido el res");
         if (!res) {
           setIsAuthenticated(false);
