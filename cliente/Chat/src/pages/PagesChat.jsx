@@ -13,6 +13,8 @@ function PagesChat() {
   const [menssageS, setMenssageS] = useState([]);
   const [userId, setUserId] = useState();
   const { user } = useMyContext();
+  const [file, setFile] = useState();
+  const [preview, setPreview] = useState();
   const inputMessage = useRef(null);
   const chatSeccion = useRef(null);
 
@@ -26,7 +28,6 @@ function PagesChat() {
         ...prevMenssageS,
         { menssage, userMenssage, username },
       ]);
-      
 
       setUserId(socket.id);
     });
@@ -37,9 +38,23 @@ function PagesChat() {
       socket.off("connect");
     };
   }, []);
-  useEffect(()=>{
-    chatSeccion.current.scrollTop = chatSeccion.current.scrollHeight;
-  }, [menssageS]);
+  useEffect(() => {
+    function scrollChatSeccion() {
+      chatSeccion.current.scrollTop = chatSeccion.current.scrollHeight;
+    }
+    scrollChatSeccion();
+  }, [menssageS, preview]);
+
+  const handleSaveImg = (e) => {
+    setFile(e.target.files[0]);
+   
+    console.log(file);
+  };
+  useEffect(() => {
+    if (file) {
+      setPreview(URL.createObjectURL(file));
+    }
+  }, [file]);
 
   const sendMenssage = () => {
     if (menssage.trim()) {
@@ -74,7 +89,7 @@ function PagesChat() {
           <div
             ref={chatSeccion}
             className="chatSection"
-         
+            style={{ height: preview && "68%" }}
           >
             {menssageS.map((item, index) => {
               return (
@@ -100,6 +115,15 @@ function PagesChat() {
               );
             })}
           </div>
+          {preview && (
+            <div className="containerPreviewImg">
+              <div
+                className="previewImg"
+                style={{ backgroundImage: `url( ${preview} )` }}
+              ></div>
+            </div>
+          )}
+
           <div className="inputContainer">
             <input
               ref={inputMessage}
@@ -115,6 +139,17 @@ function PagesChat() {
               onClick={() => sendMenssage()}
             >
               Enviar
+            </button>
+            <button className="buttonSendImg buttonStyle">
+              <input
+                type="file"
+                className="inputSendImg"
+                name="imgSend"
+                onChange={(e) => {
+                  handleSaveImg(e);
+                }}
+              />
+              <i className="fa-solid fa-images"></i>
             </button>
           </div>
         </div>
@@ -135,6 +170,7 @@ function PagesChat() {
             <button className="buttonChatsList buttonStyle2">
               <i className="fa-solid fa-comments"></i>
             </button>
+
             <button
               className="buttonLogOut buttonStyle"
               onClick={() => logout()}

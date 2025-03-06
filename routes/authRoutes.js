@@ -45,7 +45,7 @@ routes.post("/api/login", async (req, res) => {
           .cookie("token", tokenUser, {
             httpOnly: false,
             secure: process.env.NODE_ENV === "production", // Solo usa cookies seguras (https)
-            sameSite: "None", // Necesario para permitir cookies entre diferentes dominios
+            sameSite: process.env.NODE_ENV === "production" ? "None" : "", // Necesario para permitir cookies entre diferentes dominios
             expires: new Date(Date.now() + 3600000), // Expiración (1 hora, ajusta según tu necesidad)
           })
           .status(200)
@@ -66,7 +66,7 @@ routes.post("/api/logout", (req, res) => {
   res.cookie("token", "", {
     httpOnly: false, // Si la cookie se creó con httpOnly, debe eliminarse desde el servidor
     secure: process.env.NODE_ENV === "production", // Solo en HTTPS en producción
-    sameSite: "None", // Si la usaste al crear la cookie, inclúyela aquí
+    sameSite: process.env.NODE_ENV === "production" ? "None" : "", // Si la usaste al crear la cookie, inclúyela aquí
     path: "/", // Asegura que se elimine en todas las rutas
     expires: new Date(0), // Alternativa: maxAge: 0
   });

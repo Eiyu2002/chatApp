@@ -69,11 +69,11 @@ body {
 }
 
 .inputChat {
-  width: 90%;
+  flex: 3;
 }
 
 .sendChat {
-  width: 10%;
+  flex: 1;
 }
 
 .textInChat {
@@ -109,8 +109,6 @@ body {
   background: #1e1e1e;
   color: #00ffcc;
 
-
-
   width: fit-content;
   max-width: 50%;
 
@@ -120,7 +118,6 @@ body {
   margin-bottom: 0.5em;
   margin-left: 1em;
   border: 2px solid #00ffcc;
-
 
   align-items: center;
 
@@ -196,4 +193,30 @@ body {
 .buttonStyle:hover {
   background: #333;
   color: #ffffff;
+}
+.buttonSendImg {
+  position: relative;
+  flex: 1;
+}
+.inputSendImg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  width: 40%;
+
+  cursor: pointer;
+}
+
+.containerPreviewImg{
+  width: 25%;
+  height: 15%;
+}
+
+.previewImg {
+  width: 90%;
+  height: 90%;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
 }
