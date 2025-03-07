@@ -3,7 +3,7 @@ import { io } from "socket.io-client";
 import { useEffect, useState } from "react";
 import "../assets/styleChat.css";
 import { useMyContext } from "../context/Context";
-import { logoutUser } from "../apis/auth";
+import { logoutUser, sendImage } from "../apis/auth";
 import { useNavigate } from "react-router-dom";
 
 const socket = io("http://localhost:3000");
@@ -15,18 +15,17 @@ function PagesChat() {
   const { user } = useMyContext();
   const [file, setFile] = useState();
   const [preview, setPreview] = useState();
+
   const inputMessage = useRef(null);
   const chatSeccion = useRef(null);
 
-  useEffect(() => {
-    socket.on("connect", () => {
-      setUserId(socket.id);
-    });
 
-    socket.on("mensaje", ({ menssage, userMenssage, username }) => {
+  //ESCUCHAR MENSAJES DEL BACKEND Y GUARDARLOS EN UN ESTADO PARA EL USO EN EL FRONTEND
+  useEffect(() => {
+    socket.on("mensaje", ({ fileUrl, menssage, userMenssage, username }) => {
       setMenssageS((prevMenssageS) => [
         ...prevMenssageS,
-        { menssage, userMenssage, username },
+        { fileUrl, menssage, userMenssage, username },
       ]);
 
       setUserId(socket.id);
@@ -35,9 +34,11 @@ function PagesChat() {
 
     return () => {
       socket.off("mensaje");
-      socket.off("connect");
     };
   }, []);
+
+
+  //MANEJO DEL SCROLL, SE EJECUTA CADA QUE SE CAMBIA ESTADO DE LOS MENSAJES Y LA PREVIEW DE LA IMAGEN
   useEffect(() => {
     function scrollChatSeccion() {
       chatSeccion.current.scrollTop = chatSeccion.current.scrollHeight;
@@ -45,28 +46,50 @@ function PagesChat() {
     scrollChatSeccion();
   }, [menssageS, preview]);
 
+  //GUARDAR IMAGEN SELECCIONADA EN FILE Y EN LA PREVIEW. FILE ES ENVIADA AL BACKEND
   const handleSaveImg = (e) => {
-    setFile(e.target.files[0]);
-   
-    console.log(file);
-  };
-  useEffect(() => {
-    if (file) {
-      setPreview(URL.createObjectURL(file));
+    if (e.target.files[0]) {
+      setFile(e.target.files[0]);
+      setPreview(URL.createObjectURL(e.target.files[0]));
+      e.target.value = "";
     }
-  }, [file]);
+  };
 
-  const sendMenssage = () => {
-    if (menssage.trim()) {
-      socket.emit("mensaje", {
-        menssage,
-        userMenssage: socket.id,
-        username: user.username,
-      });
+
+//SE ENVIA MENSAJES CON O SIN IMAGEN AL BACKEND. EL BACKEND LOS REENVIA AL FRONTEND
+  const sendMenssage = async () => {
+
+    if (menssage.trim() || file) {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      //ARCHIVO DE IMAGEN MANDADA AL BACKEND, EL BACKEND DEVUELVE URL DEL ARCHIVO
+      const imgUrl = await sendImage(formData);
+      //URL DEL ARCHIVO SE MANDA AL BACKEND Y SE REENVIA COMO MENSAJE USANDO SOCKET.IO
+      if (imgUrl) {
+        socket.emit("mensaje", {
+          fileUrl: imgUrl,
+          menssage,
+          userMenssage: socket.id,
+          username: user.username,
+        });
+      } else {
+        socket.emit("mensaje", {
+          menssage,
+          userMenssage: socket.id,
+          username: user.username,
+        });
+      }
+
       setMenssage("");
+      setFile(null);
+      setPreview(null);
       inputMessage.current.value = "";
     }
   };
+
+
+
   //MANEJAR EL CIERRE DE SESION DEL BOTON CERRAR SESION
   const logout = async () => {
     const res = await logoutUser();
@@ -81,6 +104,11 @@ function PagesChat() {
       sendMenssage();
     }
   };
+
+
+
+
+  //FRONTEND
 
   return (
     <div className="bodyChat">
@@ -109,6 +137,16 @@ function PagesChat() {
                     }
                   >
                     <h1 className="userNameInChat"> {item.username} </h1>
+                    {item.fileUrl && (
+                      <div className="containerImgInChat">
+                        <div
+                          className="imgInChat"
+                          style={{ backgroundImage: `url(${item.fileUrl})` }}
+                        >
+                          {" "}
+                        </div>{" "}
+                      </div>
+                    )}
                     <h1> {item.menssage} </h1>
                   </div>
                 </div>

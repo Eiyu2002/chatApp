@@ -43,3 +43,15 @@ export async function verifyToken() {
     console.log(`Error al verificar el token. ${error.response.data.message} `);
   }
 }
+
+export async function sendImage(img) {
+
+  try {
+    const response = await axios.post("/sendImage", img);
+    console.log(`Imagen enviada con exito. ${response.data.message}`);
+    return response.data.fileUrl;
+  } catch (error) {
+    console.log(`Error al enviar la imagen. ${error.response.data.message} `);
+  }
+  
+}
