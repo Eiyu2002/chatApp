@@ -5,8 +5,16 @@ import "../assets/styleChat.css";
 import { useMyContext } from "../context/Context";
 import { logoutUser, sendImage } from "../apis/auth";
 import { useNavigate } from "react-router-dom";
+let url = "";
 
-const socket = io("http://localhost:3000");
+if(import.meta.env.VITE_PROD_ENV === "produccion"){
+    url = `chatapp-production-b82e.up.railway.app`;
+}else{
+    url = 'http://localhost:3000'
+}
+
+
+const socket = io(url);
 
 function PagesChat() {
   const [menssage, setMenssage] = useState("");

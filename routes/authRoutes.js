@@ -22,44 +22,44 @@ routes.post("/api/register", async (req, res) => {
   }
 });
 
-//Inicio de sesion
-routes.post("/api/login", async (req, res) => {
-  try {
-    const { userName, userPassword } = req.body;
+  //Inicio de sesion
+  routes.post("/api/login", async (req, res) => {
+    try {
+      const { userName, userPassword } = req.body;
 
-    const [rows] = await db.query("SELECT * FROM users WHERE userName = ?", [
-      userName,
-    ]);
+      const [rows] = await db.query("SELECT * FROM users WHERE userName = ?", [
+        userName,
+      ]);
 
-    if (rows.length > 0) {
-      const comparePassword = await bcrypt.compare(
-        userPassword,
-        rows[0].userpassword
-      );
-      if (comparePassword) {
-        const tokenUser = jwt.sign({ id: rows[0].id }, process.env.JWT_SECRET, {
-          expiresIn: process.env.JWT_EXPIRES,
-        });
+      if (rows.length > 0) {
+        const comparePassword = await bcrypt.compare(
+          userPassword,
+          rows[0].userpassword
+        );
+        if (comparePassword) {
+          const tokenUser = jwt.sign({ id: rows[0].id }, process.env.JWT_SECRET, {
+            expiresIn: process.env.JWT_EXPIRES,
+          });
 
-        res
-          .cookie("token", tokenUser, {
-            httpOnly: false,
-            secure: process.env.NODE_ENV === "production", // Solo usa cookies seguras (https)
-            sameSite: process.env.NODE_ENV === "production" ? "None" : "", // Necesario para permitir cookies entre diferentes dominios
-            expires: new Date(Date.now() + 3600000), // Expiración (1 hora, ajusta según tu necesidad)
-          })
-          .status(200)
-          .json({ message: "Inicio de sesion realizado correctamente" });
+          res
+            .cookie("token", tokenUser, {
+              httpOnly: false,
+              secure: process.env.NODE_ENV === "production", // Solo usa cookies seguras (https)
+              sameSite: process.env.NODE_ENV === "production" ? "None" : "", // Necesario para permitir cookies entre diferentes dominios
+              expires: new Date(Date.now() + 3600000), // Expiración (1 hora, ajusta según tu necesidad)
+            })
+            .status(200)
+            .json({ message: "Inicio de sesion realizado correctamente" });
+        } else {
+          return res.status(500).json({ message: "Contraseña incorrecta" });
+        }
       } else {
-        return res.status(500).json({ message: "Contraseña incorrecta" });
+        return res.status(404).json({ message: "Usuario no encontrado" });
       }
-    } else {
-      return res.status(404).json({ message: "Usuario no encontrado" });
+    } catch (error) {
+      res.status(500).send(error);
     }
-  } catch (error) {
-    res.status(500).send(error);
-  }
-});
+  });
 
 //Cierre de sesion
 routes.post("/api/logout", (req, res) => {

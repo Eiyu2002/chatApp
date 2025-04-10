@@ -6,7 +6,7 @@ import routes from "./routes/authRoutes.js";
 import dotenv from "dotenv";
 import cookieparser from "cookie-parser";
 import multer from "multer";
-import { dirname} from "path";
+import { dirname } from "path";
 import path from "path";
 import fs from "fs";
 import { fileURLToPath } from "url";
@@ -21,7 +21,7 @@ const storage = multer.diskStorage({
     cb(null, "./uploads");
   },
   filename: function (req, file, cb) {
-    cb(null,"img" + Date.now());
+    cb(null, "img" + Date.now());
   },
 });
 
@@ -34,7 +34,7 @@ if (!fs.existsSync(uploadsDir)) {
 
 const app = express();
 const __dirname = dirname(fileURLToPath(import.meta.url));
-app.use('/api/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use("/api/uploads", express.static(path.join(__dirname, "uploads")));
 dotenv.config();
 app.use(cookieparser());
 app.use(
@@ -59,7 +59,7 @@ app.post("/api/sendImage", upload.single("file"), (req, res) => {
   if (!req.file) {
     return res.status(400).json({ error: "No se envió ningún archivo" });
   }
- 
+
   const fileUrl =
     process.env.NODE_ENV === "production"
       ? `chatapp-production-b82e.up.railway.app/uploads/${req.file.filename} `
@@ -91,8 +91,6 @@ io.on("connection", (socket) => {
 
     io.emit("mensaje", { fileUrl, menssage, userMenssage, username });
   });
-
-
 });
 
 server.listen(process.env.PORT || 3000, () => {
